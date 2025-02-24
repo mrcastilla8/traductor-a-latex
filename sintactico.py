@@ -57,6 +57,7 @@ class Parser:
         self.error = False
         return self.parser.parse(data, lexer=lexer)
 
+    # --- Reglas Gramaticales ---
     def p_expression_plus(self, p):
         'expression : expression PLUS term'
         p[0] = BinOpNode(p[1], '+', p[3])
@@ -83,7 +84,7 @@ class Parser:
 
     def p_term_factor(self, p):
         'term : factor'
-        p[0] = p[1]
+        p[0] = p[1]  # Corregido de p0[] a p[0]
 
     def p_factor_number(self, p):
         'factor : NUMBER'
@@ -97,9 +98,13 @@ class Parser:
         'factor : CONSTANT'
         p[0] = ConstantNode(p[1])
 
-    def p_factor_function(self, p):
+    def p_factor_function_with_args(self, p):
         'factor : FUNCTION PAREN_OPEN arg_list PAREN_CLOSE'
         p[0] = FunctionNode(p[1], p[3])
+
+    def p_factor_function_no_args(self, p):
+        'factor : FUNCTION PAREN_OPEN PAREN_CLOSE'
+        p[0] = FunctionNode(p[1], None)
 
     def p_factor_paren(self, p):
         'factor : PAREN_OPEN expression PAREN_CLOSE'
@@ -111,7 +116,7 @@ class Parser:
 
     def p_factor_unary_plus(self, p):
         'factor : PLUS factor %prec UPLUS'
-        p[0] = p[2]  # El operador + no cambia el valor
+        p[0] = p[2]
 
     def p_arg_list(self, p):
         '''
@@ -131,7 +136,7 @@ class Parser:
             print("\nError de sintaxis: Final inesperado de la entrada")
             self.error = True
 
-# --- Función principal ---
+# --- Función Principal ---
 if __name__ == "__main__":
     lexer = Lexer().lexer
     parser = Parser()
