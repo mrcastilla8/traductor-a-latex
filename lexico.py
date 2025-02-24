@@ -1,8 +1,3 @@
-# pylint: disable=C0103,C0116
-"""
-Este módulo implementa un analizador léxico utilizando PLY.
-"""
-
 import ply.lex as lex
 
 class Lexer:
@@ -12,15 +7,22 @@ class Lexer:
     """
     # Definición de los tokens
     tokens = (
-        'NUMBER', 'VARIABLE', 'OPERATOR',
-        'PAREN_OPEN', 'PAREN_CLOSE', 'CONSTANT', 'FUNCTION'
+        'NUMBER', 'VARIABLE', 'CONSTANT',
+        'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'POWER',
+        'PAREN_OPEN', 'PAREN_CLOSE', 'FUNCTION'
     )
 
     # Lista de funciones matemáticas soportadas
-    MATH_FUNCTIONS = {'sqrt', 'sin', 'cos', 'tan', 'log', 'exp', 'abs'}
+    MATH_FUNCTIONS = {
+        'sqrt', 'sin', 'cos', 'tan', 'log', 'exp', 'abs'
+    }
 
     # Reglas para reconocer tokens con expresiones regulares
-    t_OPERATOR = r'\+|\-|\*|\/|\^'
+    t_PLUS = r'\+'
+    t_MINUS = r'-'
+    t_TIMES = r'\*'
+    t_DIVIDE = r'/'
+    t_POWER = r'\^'
     t_PAREN_OPEN = r'\('
     t_PAREN_CLOSE = r'\)'
     t_ignore = ' \t'
