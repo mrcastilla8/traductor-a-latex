@@ -33,9 +33,7 @@ class SemanticAnalyzer:
                 raise ValueError(f"Error semántico: Constante desconocida '{node.value}'.")
 
         elif isinstance(node, VariableNode):
-            if node.name not in self.variables:
-                raise ValueError(f"Error semántico: Variable no definida '{node.name}'.")
-            return self.variables[node.name]
+            return 0
 
         elif isinstance(node, BinOpNode):
             left_val = self.validate(node.left)
