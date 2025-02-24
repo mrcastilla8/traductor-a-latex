@@ -1,15 +1,58 @@
-import re
-import ply.lex as lex  # Si se usa PLY
+# pylint: disable=C0103,C0116
+"""
+Este módulo implementa un analizador léxico utilizando PLY.
+"""
+
+import ply.lex as lex
 
 class Lexer:
+    """
+    Analizador léxico que tokeniza expresiones matemáticas.
+    Soporta números, variables, operadores, funciones y constantes matemáticas.
+    """
+    # Definición de los tokens
+    tokens = (
+        'NUMBER', 'VARIABLE', 'OPERATOR',
+        'PAREN_OPEN', 'PAREN_CLOSE', 'CONSTANT', 'FUNCTION'
+    )
+
+    # Lista de funciones matemáticas soportadas
+    MATH_FUNCTIONS = {'sqrt', 'sin', 'cos', 'tan', 'log', 'exp', 'abs'}
+
+    # Reglas para reconocer tokens con expresiones regulares
+    t_OPERATOR = r'\+|\-|\*|\/|\^'
+    t_PAREN_OPEN = r'\('
+    t_PAREN_CLOSE = r'\)'
+    t_ignore = ' \t'
+
+    def t_NUMBER(self, t):
+        r'\d+\.?\d*'
+        t.value = float(t.value) if '.' in t.value else int(t.value)
+        return t
+
+    def t_VARIABLE(self, t):
+        r'[a-zA-Z_]+'
+        if t.value in self.MATH_FUNCTIONS:
+            t.type = 'FUNCTION'
+        elif t.value in {'pi', 'π'}:
+            t.type = 'CONSTANT'
+        return t
+
+    def t_error(self, t):
+        print(f"Error léxico: carácter no reconocido '{t.value[0]}' en posición {t.lexpos}")
+        t.lexer.skip(1)
+
     def __init__(self):
-        """Inicializa el analizador léxico."""
-        self.lexer = None  # Aquí se definirá el lexer
+        self.lexer = lex.lex(module=self)
 
-    def tokenize(self, expression):
-        """Convierte una expresión matemática en una lista de tokens."""
-        pass  # Implementación futura
+    def tokenize(self, expr):
+        """Convierte una expresión en una lista de tokens."""
+        self.lexer.input(expr)
+        return [{"type": tok.type, "value": tok.value} for tok in self.lexer]
 
-    def manejar_errores(self):
-        """Manejo de errores léxicos (caracteres no reconocidos, etc.)."""
-        pass
+# Ejemplo de uso
+if __name__ == "__main__":
+    lexer = Lexer()
+    user_expression = input("Introduce una expresión matemática: ")
+    tokens = lexer.tokenize(user_expression)
+    print(tokens)
