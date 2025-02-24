@@ -6,9 +6,15 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
+<<<<<<< HEAD
 _lr_signature = 'rightPOWERrightUMINUSUPLUSleftTIMESDIVIDEleftPLUSMINUSCOMMA CONSTANT DIVIDE FUNCTION MINUS NUMBER PAREN_CLOSE PAREN_OPEN PLUS POWER TIMES VARIABLEexpression : expression PLUS termexpression : expression MINUS termexpression : termterm : term TIMES factorterm : term DIVIDE factorterm : term POWER factorterm : factorfactor : NUMBERfactor : VARIABLEfactor : CONSTANTfactor : FUNCTION PAREN_OPEN arg_list PAREN_CLOSEfactor : FUNCTION PAREN_OPEN PAREN_CLOSEfactor : PAREN_OPEN expression PAREN_CLOSEfactor : MINUS factor %prec UMINUSfactor : PLUS factor %prec UPLUS\n        arg_list : expression\n                 | arg_list COMMA expression\n        '
     
 _lr_action_items = {'NUMBER':([0,2,4,10,11,12,14,15,16,18,30,],[6,6,6,6,6,6,6,6,6,6,6,]),'VARIABLE':([0,2,4,10,11,12,14,15,16,18,30,],[7,7,7,7,7,7,7,7,7,7,7,]),'CONSTANT':([0,2,4,10,11,12,14,15,16,18,30,],[8,8,8,8,8,8,8,8,8,8,8,]),'FUNCTION':([0,2,4,10,11,12,14,15,16,18,30,],[9,9,9,9,9,9,9,9,9,9,9,]),'PAREN_OPEN':([0,2,4,9,10,11,12,14,15,16,18,30,],[10,10,10,18,10,10,10,10,10,10,10,10,]),'MINUS':([0,1,2,3,4,5,6,7,8,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,28,29,30,31,],[4,12,4,-3,4,-7,-8,-9,-10,4,4,4,-15,4,4,4,-14,4,12,-1,-2,-4,-5,-6,-12,12,-13,-11,4,12,]),'PLUS':([0,1,2,3,4,5,6,7,8,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,28,29,30,31,],[2,11,2,-3,2,-7,-8,-9,-10,2,2,2,-15,2,2,2,-14,2,11,-1,-2,-4,-5,-6,-12,11,-13,-11,2,11,]),'$end':([1,3,5,6,7,8,13,17,20,21,22,23,24,26,28,29,],[0,-3,-7,-8,-9,-10,-15,-14,-1,-2,-4,-5,-6,-12,-13,-11,]),'PAREN_CLOSE':([3,5,6,7,8,13,17,18,19,20,21,22,23,24,25,26,27,28,29,31,],[-3,-7,-8,-9,-10,-15,-14,26,28,-1,-2,-4,-5,-6,29,-12,-16,-13,-11,-17,]),'COMMA':([3,5,6,7,8,13,17,20,21,22,23,24,25,26,27,28,29,31,],[-3,-7,-8,-9,-10,-15,-14,-1,-2,-4,-5,-6,30,-12,-16,-13,-11,-17,]),'TIMES':([3,5,6,7,8,13,17,20,21,22,23,24,26,28,29,],[14,-7,-8,-9,-10,-15,-14,14,14,-4,-5,-6,-12,-13,-11,]),'DIVIDE':([3,5,6,7,8,13,17,20,21,22,23,24,26,28,29,],[15,-7,-8,-9,-10,-15,-14,15,15,-4,-5,-6,-12,-13,-11,]),'POWER':([3,5,6,7,8,13,17,20,21,22,23,24,26,28,29,],[16,-7,-8,-9,-10,-15,-14,16,16,-4,-5,-6,-12,-13,-11,]),}
+=======
+_lr_signature = 'rightPOWERrightUMINUSUPLUSleftTIMESDIVIDEleftPLUSMINUSCOMMA CONSTANT DIVIDE FUNCTION MINUS NUMBER PAREN_CLOSE PAREN_OPEN PLUS POWER TIMES VARIABLEexpression : expression PLUS termexpression : expression MINUS termexpression : termterm : term TIMES factorterm : term DIVIDE factorterm : term POWER factorterm : factorfactor : NUMBERfactor : VARIABLEfactor : CONSTANTfactor : FUNCTION PAREN_OPEN arg_list PAREN_CLOSEfactor : PAREN_OPEN expression PAREN_CLOSEfactor : MINUS factor %prec UMINUSfactor : PLUS factor %prec UPLUS\narg_list : expression\n         | arg_list COMMA expression\n'
+    
+_lr_action_items = {'NUMBER':([0,2,4,10,11,12,14,15,16,18,29,],[6,6,6,6,6,6,6,6,6,6,6,]),'VARIABLE':([0,2,4,10,11,12,14,15,16,18,29,],[7,7,7,7,7,7,7,7,7,7,7,]),'CONSTANT':([0,2,4,10,11,12,14,15,16,18,29,],[8,8,8,8,8,8,8,8,8,8,8,]),'FUNCTION':([0,2,4,10,11,12,14,15,16,18,29,],[9,9,9,9,9,9,9,9,9,9,9,]),'PAREN_OPEN':([0,2,4,9,10,11,12,14,15,16,18,29,],[10,10,10,18,10,10,10,10,10,10,10,10,]),'MINUS':([0,1,2,3,4,5,6,7,8,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,28,29,30,],[4,12,4,-3,4,-7,-8,-9,-10,4,4,4,-14,4,4,4,-13,4,12,-1,-2,-4,-5,-6,12,-12,-11,4,12,]),'PLUS':([0,1,2,3,4,5,6,7,8,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,28,29,30,],[2,11,2,-3,2,-7,-8,-9,-10,2,2,2,-14,2,2,2,-13,2,11,-1,-2,-4,-5,-6,11,-12,-11,2,11,]),'$end':([1,3,5,6,7,8,13,17,20,21,22,23,24,27,28,],[0,-3,-7,-8,-9,-10,-14,-13,-1,-2,-4,-5,-6,-12,-11,]),'PAREN_CLOSE':([3,5,6,7,8,13,17,19,20,21,22,23,24,25,26,27,28,30,],[-3,-7,-8,-9,-10,-14,-13,27,-1,-2,-4,-5,-6,28,-15,-12,-11,-16,]),'COMMA':([3,5,6,7,8,13,17,20,21,22,23,24,25,26,27,28,30,],[-3,-7,-8,-9,-10,-14,-13,-1,-2,-4,-5,-6,29,-15,-12,-11,-16,]),'TIMES':([3,5,6,7,8,13,17,20,21,22,23,24,27,28,],[14,-7,-8,-9,-10,-14,-13,14,14,-4,-5,-6,-12,-11,]),'DIVIDE':([3,5,6,7,8,13,17,20,21,22,23,24,27,28,],[15,-7,-8,-9,-10,-14,-13,15,15,-4,-5,-6,-12,-11,]),'POWER':([3,5,6,7,8,13,17,20,21,22,23,24,27,28,],[16,-7,-8,-9,-10,-14,-13,16,16,-4,-5,-6,-12,-11,]),}
+>>>>>>> a33fe2342fa1118229b922252722980b0b5cd97b
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +23,11 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
+<<<<<<< HEAD
 _lr_goto_items = {'expression':([0,10,18,30,],[1,19,27,31,]),'term':([0,10,11,12,18,30,],[3,3,20,21,3,3,]),'factor':([0,2,4,10,11,12,14,15,16,18,30,],[5,13,17,5,5,5,22,23,24,5,5,]),'arg_list':([18,],[25,]),}
+=======
+_lr_goto_items = {'expression':([0,10,18,29,],[1,19,26,30,]),'term':([0,10,11,12,18,29,],[3,3,20,21,3,3,]),'factor':([0,2,4,10,11,12,14,15,16,18,29,],[5,13,17,5,5,5,22,23,24,5,5,]),'arg_list':([18,],[25,]),}
+>>>>>>> a33fe2342fa1118229b922252722980b0b5cd97b
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,6 +37,7 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> expression","S'",1,None,None,None),
+<<<<<<< HEAD
   ('expression -> expression PLUS term','expression',3,'p_expression_plus','sintactico.py',47),
   ('expression -> expression MINUS term','expression',3,'p_expression_minus','sintactico.py',51),
   ('expression -> term','expression',1,'p_expression_term','sintactico.py',55),
@@ -44,4 +55,22 @@ _lr_productions = [
   ('factor -> PLUS factor','factor',2,'p_factor_unary_plus','sintactico.py',104),
   ('arg_list -> expression','arg_list',1,'p_arg_list','sintactico.py',109),
   ('arg_list -> arg_list COMMA expression','arg_list',3,'p_arg_list','sintactico.py',110),
+=======
+  ('expression -> expression PLUS term','expression',3,'p_expression_plus','sintactico.py',61),
+  ('expression -> expression MINUS term','expression',3,'p_expression_minus','sintactico.py',65),
+  ('expression -> term','expression',1,'p_expression_term','sintactico.py',69),
+  ('term -> term TIMES factor','term',3,'p_term_times','sintactico.py',73),
+  ('term -> term DIVIDE factor','term',3,'p_term_divide','sintactico.py',77),
+  ('term -> term POWER factor','term',3,'p_term_power','sintactico.py',81),
+  ('term -> factor','term',1,'p_term_factor','sintactico.py',85),
+  ('factor -> NUMBER','factor',1,'p_factor_number','sintactico.py',89),
+  ('factor -> VARIABLE','factor',1,'p_factor_variable','sintactico.py',93),
+  ('factor -> CONSTANT','factor',1,'p_factor_constant','sintactico.py',97),
+  ('factor -> FUNCTION PAREN_OPEN arg_list PAREN_CLOSE','factor',4,'p_factor_function','sintactico.py',101),
+  ('factor -> PAREN_OPEN expression PAREN_CLOSE','factor',3,'p_factor_paren','sintactico.py',105),
+  ('factor -> MINUS factor','factor',2,'p_factor_unary_minus','sintactico.py',109),
+  ('factor -> PLUS factor','factor',2,'p_factor_unary_plus','sintactico.py',113),
+  ('arg_list -> expression','arg_list',1,'p_arg_list','sintactico.py',118),
+  ('arg_list -> arg_list COMMA expression','arg_list',3,'p_arg_list','sintactico.py',119),
+>>>>>>> a33fe2342fa1118229b922252722980b0b5cd97b
 ]
