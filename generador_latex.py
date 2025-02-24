@@ -17,6 +17,9 @@ class LatexGenerator:
         """Método recursivo para convertir nodos del AST en LaTeX."""
         if isinstance(node, NumberNode):
             return str(node.value)
+        elif isinstance(node, ConstantNode):
+            if node.value == "pi":
+                return f"\\pi"
         elif isinstance(node, VariableNode):
             return node.name
         elif isinstance(node, BinOpNode):
