@@ -1,5 +1,5 @@
 import ply.yacc as yacc
-from lexico import Lexer  # Importa el Lexer actualizado
+from lexico import Lexer
 
 class NumberNode:
     def __init__(self, value):
@@ -32,29 +32,31 @@ class BinOpNode:
         return f"BinOp({self.left}, {self.operator}, {self.right})"
 
 class FunctionNode:
-    def __init__(self, name, argument):
+    def __init__(self, name, arguments):
         self.name = name
-        self.argument = argument
+        self.arguments = arguments
 
     def __repr__(self):
-        return f"Function({self.name}, {self.argument})"
+        return f"Function({self.name}, {self.arguments})"
 
 class Parser:
-    tokens = Lexer.tokens  # Tokens definidos en lexico.py
+    tokens = Lexer.tokens
 
     precedence = (
-        ('right', 'POWER'),     # Exponente
-        ('left', 'TIMES', 'DIVIDE'),   # Multiplicación y división
-        ('left', 'PLUS', 'MINUS'),     # Suma y resta
+        ('right', 'POWER'),
+        ('right', 'UMINUS', 'UPLUS'),
+        ('left', 'TIMES', 'DIVIDE'),
+        ('left', 'PLUS', 'MINUS'),
     )
 
     def __init__(self):
         self.parser = yacc.yacc(module=self)
+        self.error = False
 
     def parse(self, data, lexer):
+        self.error = False
         return self.parser.parse(data, lexer=lexer)
 
-    # --- Reglas gramaticales ---
     def p_expression_plus(self, p):
         'expression : expression PLUS term'
         p[0] = BinOpNode(p[1], '+', p[3])
@@ -68,11 +70,11 @@ class Parser:
         p[0] = p[1]
 
     def p_term_times(self, p):
-        'term : term TIMES expression'
+        'term : term TIMES factor'
         p[0] = BinOpNode(p[1], '*', p[3])
 
     def p_term_divide(self, p):
-        'term : term DIVIDE expression'
+        'term : term DIVIDE factor'
         p[0] = BinOpNode(p[1], '/', p[3])
 
     def p_term_power(self, p):
@@ -96,23 +98,43 @@ class Parser:
         p[0] = ConstantNode(p[1])
 
     def p_factor_function(self, p):
-        'factor : FUNCTION PAREN_OPEN expression PAREN_CLOSE'
+        'factor : FUNCTION PAREN_OPEN arg_list PAREN_CLOSE'
         p[0] = FunctionNode(p[1], p[3])
 
     def p_factor_paren(self, p):
         'factor : PAREN_OPEN expression PAREN_CLOSE'
         p[0] = p[2]
 
+    def p_factor_unary_minus(self, p):
+        'factor : MINUS factor %prec UMINUS'
+        p[0] = BinOpNode(NumberNode(0), '-', p[2])
+
+    def p_factor_unary_plus(self, p):
+        'factor : PLUS factor %prec UPLUS'
+        p[0] = p[2]  # El operador + no cambia el valor
+
+    def p_arg_list(self, p):
+        '''
+        arg_list : expression
+                 | arg_list COMMA expression
+        '''
+        if len(p) == 2:
+            p[0] = [p[1]]
+        else:
+            p[0] = p[1] + [p[3]]
+
     def p_error(self, p):
         if p:
             print(f"\nError de sintaxis: Token '{p.value}' no esperado en posición {p.lexpos}")
+            self.error = True
         else:
             print("\nError de sintaxis: Final inesperado de la entrada")
+            self.error = True
 
 # --- Función principal ---
 if __name__ == "__main__":
-    lexer = Lexer().lexer  # Crea el lexer
-    parser = Parser()      # Crea el parser
+    lexer = Lexer().lexer
+    parser = Parser()
 
     while True:
         try:
@@ -120,6 +142,9 @@ if __name__ == "__main__":
             if entrada.lower() == "salir":
                 break
             resultado = parser.parse(entrada, lexer=lexer)
-            print("AST generado:", resultado)
+            if parser.error:
+                print("AST generado: None")
+            else:
+                print("AST generado:", resultado)
         except Exception as e:
             print("\nError durante el análisis:", str(e))

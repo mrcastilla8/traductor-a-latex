@@ -9,15 +9,15 @@ class Lexer:
     tokens = (
         'NUMBER', 'VARIABLE', 'CONSTANT',
         'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'POWER',
-        'PAREN_OPEN', 'PAREN_CLOSE', 'FUNCTION'
+        'PAREN_OPEN', 'PAREN_CLOSE', 'FUNCTION', 'COMMA'
     )
 
     # Lista de funciones matemáticas soportadas
-    MATH_FUNCTIONS = {
-        'sqrt', 'sin', 'cos', 'tan', 'log', 'exp', 'abs'
-    }
+    MATH_FUNCTIONS = {'sqrt', 'sin', 'cos', 'tan', 'log', 'exp', 'abs'}
+    
 
     # Reglas para reconocer tokens con expresiones regulares
+    t_COMMA = r','
     t_PLUS = r'\+'
     t_MINUS = r'-'
     t_TIMES = r'\*'
@@ -36,19 +36,18 @@ class Lexer:
         r'[a-zA-Z_]+'
         if t.value in self.MATH_FUNCTIONS:
             t.type = 'FUNCTION'
-        elif t.value in {'pi', 'π'}:
+        elif t.value.lower() in {'pi', 'π'}:
             t.type = 'CONSTANT'
         return t
 
     def t_error(self, t):
-        print(f"Error léxico: carácter no reconocido '{t.value[0]}' en posición {t.lexpos}")
+        print(f"Error léxico: Carácter no reconocido '{t.value[0]}' en posición {t.lexpos}")
         t.lexer.skip(1)
 
     def __init__(self):
         self.lexer = lex.lex(module=self)
 
     def tokenize(self, expr):
-        """Convierte una expresión en una lista de tokens."""
         self.lexer.input(expr)
         return [{"type": tok.type, "value": tok.value} for tok in self.lexer]
 
