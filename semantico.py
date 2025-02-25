@@ -87,13 +87,24 @@ class SemanticAnalyzer:
         elif isinstance(node, FunctionNode):
             if node.name not in self.MATH_FUNCTIONS:
                 raise ValueError(f"Error semántico: Función desconocida '{node.name}'.")
+
             expected_args = self.MATH_FUNCTIONS[node.name]
             if not node.arguments or len(node.arguments) == 0:
                 raise ValueError(f"Error semántico: La función '{node.name}' requiere {expected_args} argumento(s), pero recibió 0.")
             if len(node.arguments) != expected_args:
                 raise ValueError(f"Error semántico: La función '{node.name}' esperaba {expected_args} argumento(s), pero recibió {len(node.arguments)}.")
+
+            # Evaluar el primer argumento (en nuestro caso, sqrt espera 1 argumento)
+            arg_value = self.validate(node.arguments[0])
+            
+            # Verificar específicamente para sqrt
+            if node.name == 'sqrt' and arg_value is not None and arg_value < 0:
+                raise ValueError("Error semántico: No se puede calcular la raíz cuadrada de un número negativo en los números reales.")
+
+            # Luego se validan todos los argumentos recursivamente
             for arg in node.arguments:
                 self.validate(arg)
+
             return None
 
         else:
