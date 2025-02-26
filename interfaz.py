@@ -1,7 +1,6 @@
 import customtkinter as ctk
 from PIL import Image
 import pyperclip
-from tkinter import Toplevel, Label
 from pygame import mixer
 import datetime
 from lexico import Lexer
@@ -98,13 +97,15 @@ class ChatLatexApp:
 
         back_button = ctk.CTkButton(back_frame, text="Regresar", command=self.go_back, font=("Poppins", 16, "bold"))
         back_button.pack(side="left", padx=10)
- 
-        title_label = ctk.CTkLabel(self.app, text="Traductor a Latex", font=("Poppins", 26, "bold"), text_color="#FFFFFF",
+        # Botón de reiniciar chat
+        restart_button = ctk.CTkButton(back_frame, text="Reiniciar Chat", command=self.restart_chat, font=("Poppins", 16, "bold"))
+        restart_button.pack(side="left", padx=10)
+        self.title_label = ctk.CTkLabel(self.app, text="Traductor a Latex", font=("Poppins", 26, "bold"), text_color="#FFFFFF",
                                fg_color="#3A3A3A", corner_radius=8, padx=10, pady=10)
-        title_label.pack(fill="x", padx=20, pady=10)
+        self.title_label.pack(fill="x", padx=20, pady=10)
 
-        chat_frame = ctk.CTkScrollableFrame(self.app, fg_color="#3A3A3A", corner_radius=12)
-        chat_frame.pack(fill="both", expand=True, padx=20, pady=10)
+        self.chat_frame = ctk.CTkScrollableFrame(self.app, fg_color="#3A3A3A", corner_radius=12)
+        self.chat_frame.pack(fill="both", expand=True, padx=20, pady=10)
         # Inicializar componentes
         self.lexer = Lexer().lexer
         self.parser = Parser()
@@ -122,7 +123,7 @@ class ChatLatexApp:
         self.add_message("Bienvenido al generador de PDFs matemáticos.\n"
                      "Ingresa una expresión matemática y se generará un PDF con las expresiones renderizadas.\n"
                      "Escribe 'salir' para terminar el programa y generar el PDF.\n", 
-                     chat_frame, sender="bot")
+                     self.chat_frame, sender="bot")
 
         entry_frame = ctk.CTkFrame(self.app, fg_color="#2A2A2A", corner_radius=12)
         entry_frame.pack(side="bottom", fill="x", padx=10, pady=10)
@@ -141,14 +142,22 @@ class ChatLatexApp:
 
         textbox.bind("<Button-1>", on_textbox_click)
 
-        submit_button = ctk.CTkButton(entry_frame, text="Enviar", fg_color="#2196F3", text_color="white", corner_radius=12, command=lambda: self.send_message(textbox, chat_frame))
+        submit_button = ctk.CTkButton(entry_frame, text="Enviar", fg_color="#2196F3", text_color="white", corner_radius=12, command=lambda: self.send_message(textbox, self.chat_frame))
         submit_button.pack(side="right", padx=10, pady=10)
+        if self.state == "finished":
+            textbox.configure(state="disabled")
+            submit_button.configure(state="disable")
+
 
     def send_message(self, textbox, chat_frame):
         user_message = textbox.get("1.0", "end-1c").strip()
         mensaje_bot = ""
 
         try:
+            if self.state == "finished":
+                # Si el estado es "finished", no permitir más mensajes
+                self.add_message("El chat ha terminado. Debes reiniciar el chat para continuar.", chat_frame, sender="bot")
+                return  # Salir de la función para evitar que se procese el mensaje
             if user_message.lower() == "salir":
                 # Detener la ejecución del código cuando el usuario escribe "salir"
                 self.state = "waiting_for_pdf_name"
@@ -169,7 +178,6 @@ class ChatLatexApp:
             else:
                 # Solo procesar las expresiones si no se está en el estado de "waiting_for_pdf_name"
                 self.add_message(user_message, chat_frame, sender="user")
-                self.expresiones.append(user_message)
                 ast = self.parser.parse(user_message, lexer=self.lexer)
                 if self.parser.error:
                     mensaje_bot += "\nError: No se puede generar el AST debido a errores sintácticos."
@@ -258,11 +266,64 @@ class ChatLatexApp:
                 # Generar el PDF a partir del código LaTeX
                 pdf_generator = PDFGenerator(latex_content, nombre_pdf,autor_pdf, timestamp)
                 pdf_generator.generate_pdf()
+
+                # Mostrar mensaje de confirmación
+                self.show_confirmation_message("El PDF se ha generado correctamente", "Éxito")
+
             else:
                 self.add_message("No se ingresaron expresiones válidas. No se generará ningún PDF.", self.ch)
-
+    def show_confirmation_message(self, message, title):
+        # Crear la ventana emergente de confirmación
+        ventana_confirmacion = ctk.CTkToplevel(self.app)
+        ventana_confirmacion.title(title)
+        ventana_confirmacion.geometry("300x150")
+         # Obtener las dimensiones de la pantalla
+        screen_width = self.app.winfo_screenwidth()
+        screen_height = self.app.winfo_screenheight()
+    
+        # Obtener las dimensiones de la ventana emergente
+        window_width = 300  # Ancho de la ventana
+        window_height = 150  # Alto de la ventana
+    
+        # Calcular la posición para centrar la ventana
+        position_top = int((screen_height / 2) - (window_height / 2))
+        position_left = int((screen_width / 2) - (window_width / 2))
+    
+        # Establecer la geometría de la ventana emergente en función de la posición calculada
+        ventana_confirmacion.geometry(f"{window_width}x{window_height}+{position_left}+{position_top}")
+    
+        ventana_confirmacion.lift()
+        # Etiqueta con el mensaje
+        mensaje = ctk.CTkLabel(ventana_confirmacion, text=message, anchor="center", font=("Poppins", 14, "bold"))
+        mensaje.pack(pady=20)
+    
+        # Botón para cerrar la ventana
+        boton_cerrar = ctk.CTkButton(ventana_confirmacion, text="Cerrar", command=ventana_confirmacion.destroy)
+        boton_cerrar.pack(pady=10)
+        # Mantener la ventana emergente al frente si el usuario hace clic fuera de ella
+        ventana_confirmacion.grab_set()  # Esto bloquea la interacción con la ventana principal hasta que se cierre la emergente
     def notify_message(self):
         self.notification_sound.play()  # Reproduce el sonido cuando el bot responde
+    def restart_chat(self):
+        # Limpiar las expresiones
+        self.expresiones = []
+    
+        # Restablecer el número de expresión
+        self.expression_number = 1
+    
+        # Restablecer el estado del chat
+        self.state = "waiting_for_message"
+        self.pdf_name = ""
+        self.author = ""
+        
+        # Limpiar el marco de mensajes
+        for widget in self.app.winfo_children():
+            if isinstance(widget, ctk.CTkFrame) and widget not in [self.window, self.chat_frame]:  # Evitar destruir la ventana principal y el chat_frame
+                widget.destroy()
+        # Volver a crear la ventana de chat con todos los componentes necesarios
+        self.title_label.destroy()
+        self.chat_window()
+        
 
 
 # Ejecutar la aplicación
