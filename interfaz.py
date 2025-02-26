@@ -29,7 +29,7 @@ class ChatLatexApp:
         pos_x = int((screen_width / 2) - (chat_width / 2))
         pos_y = int((screen_height / 2) - (chat_height / 2))
         self.app.geometry(f"{chat_width}x{chat_height}+{pos_x}+{pos_y}")
-        self.app.configure(fg_color="#2A2A2A")  # Fondo principal
+        self.app.configure(fg_color="#081c29")  # Fondo principal
 
         # Cargar imágenes
         self.user_img = ctk.CTkImage(light_image=Image.open("user.png"), size=(40, 40))
@@ -47,28 +47,68 @@ class ChatLatexApp:
         self.window = ctk.CTk()
         self.window.title("ChatLatex - Inicio")
         self.window_width = 1000
-        self.window_height = 500
+        self.window_height = 700
         screen_width = self.window.winfo_screenwidth()
         screen_height = self.window.winfo_screenheight()
         pos_x = int((screen_width / 2) - (self.window_width / 2))
         pos_y = int((screen_height / 2) - (self.window_height / 2))
         self.window.geometry(f"{self.window_width}x{self.window_height}+{pos_x}+{pos_y}")
-        self.window.configure(fg_color="#2A2A2A")  # Fondo principal
+        self.window.configure(fg_color="#081c29")  # Fondo principal
 
-        title_label = ctk.CTkLabel(self.window, text="Bienvenido a ChatLatex", font=("Poppins", 26, "bold"), text_color="#FFFFFF",
-                                   fg_color="#3A3A3A", corner_radius=8, padx=10, pady=10)
+        title_label = ctk.CTkLabel(self.window, text="Bienvenido a ChatLatex", font=("Poppins", 26, "bold"), text_color="#4d4e4f",
+                                   fg_color="#93d0f8", corner_radius=8, padx=10, pady=10)
         title_label.pack(fill="x", padx=20, pady=10)
 
         start_button = ctk.CTkButton(self.window, text="Empezar a traducir", command=self.open_chat, font=("Poppins", 16, "bold"), width=200, height=50)
         start_button.pack(pady=20)
 
-        options_button = ctk.CTkButton(self.window, text="Opciones", command=self.open_chat, font=("Poppins", 16, "bold"), width=200, height=50)
+        options_button = ctk.CTkButton(self.window, text="Opciones", command=self.open_opciones, font=("Poppins", 16, "bold"), width=200, height=50)
         options_button.pack(pady=10)
 
-        about_button = ctk.CTkButton(self.window, text="Sobre el proyecto", command=self.open_chat, font=("Poppins", 16, "bold"), width=200, height=50)
+        about_button = ctk.CTkButton(self.window, text="Sobre el proyecto", command=self.open_proyecto, font=("Poppins", 16, "bold"), width=200, height=50)
         about_button.pack(pady=10)
 
         self.window.mainloop()
+
+    def open_opciones(self):
+        self.opciones_window = ctk.CTkToplevel(self.window)
+        self.opciones_window.title("Opciones")
+        screen_width = self.opciones_window.winfo_screenwidth()
+        screen_height = self.opciones_window.winfo_screenheight()
+        pos_x = int((screen_width / 2) - (self.window_width / 2))
+        pos_y = int((screen_height / 2) - (self.window_height / 2))
+        self.opciones_window.geometry(f"{self.window_width}x{self.window_height}+{pos_x}+{pos_y}")
+        self.opciones_window.configure(fg_color="#2A2A2A")  # Fondo principal
+        title_label = ctk.CTkLabel(self.opciones_window, text="Opciones", font=("Poppins", 26, "bold"), text_color="#FFFFFF",
+                                   fg_color="#3A3A3A", corner_radius=8, padx=10, pady=10)
+        title_label.pack(fill="x", padx=20, pady=10)
+
+        # Aquí puedes agregar más widgets para las opciones
+        option1 = ctk.CTkButton(self.opciones_window, text="Opción 1", font=("Poppins", 16, "bold"), width=200, height=50)
+        option1.pack(pady=10)
+
+        option2 = ctk.CTkButton(self.opciones_window, text="Opción 2", font=("Poppins", 16, "bold"), width=200, height=50)
+        option2.pack(pady=10)
+
+    def open_proyecto(self):
+        self.proyecto_window = ctk.CTkToplevel(self.window)
+        self.proyecto_window.title("Sobre el proyecto")
+        screen_width = self.proyecto_window.winfo_screenwidth()
+        screen_height = self.proyecto_window.winfo_screenheight()
+        pos_x = int((screen_width / 2) - (self.window_width / 2))
+        pos_y = int((screen_height / 2) - (self.window_height / 2))
+        self.proyecto_window.geometry(f"{self.window_width}x{self.window_height}+{pos_x}+{pos_y}")
+        self.proyecto_window.configure(fg_color="#2A2A2A")  # Fondo principal
+
+        title_label = ctk.CTkLabel(self.proyecto_window, text="Sobre el proyecto", font=("Poppins", 26, "bold"), text_color="#FFFFFF",
+                                   fg_color="#3A3A3A", corner_radius=8, padx=10, pady=10)
+        title_label.pack(fill="x", padx=20, pady=10)
+
+        # Aquí puedes agregar más widgets para la información del proyecto
+        info_label = ctk.CTkLabel(self.proyecto_window, text="Este es un proyecto de traducción de expresiones matemáticas a LaTeX.", font=("Poppins", 16), text_color="#FFFFFF")
+        info_label.pack(pady=10)
+
+
 
     def open_chat(self):
         if not self.chat_created:
@@ -92,7 +132,7 @@ class ChatLatexApp:
 
 
     def chat_window(self):
-        back_frame = ctk.CTkFrame(self.app, fg_color="#2A2A2A", corner_radius=8)
+        back_frame = ctk.CTkFrame(self.app, fg_color="#081c29", corner_radius=8)
         back_frame.pack(fill="x", padx=20, pady=10)
 
         back_button = ctk.CTkButton(back_frame, text="Regresar", command=self.go_back, font=("Poppins", 16, "bold"))
@@ -100,11 +140,11 @@ class ChatLatexApp:
         # Botón de reiniciar chat
         restart_button = ctk.CTkButton(back_frame, text="Reiniciar Chat", command=self.restart_chat, font=("Poppins", 16, "bold"))
         restart_button.pack(side="left", padx=10)
-        self.title_label = ctk.CTkLabel(self.app, text="Traductor a Latex", font=("Poppins", 26, "bold"), text_color="#FFFFFF",
-                               fg_color="#3A3A3A", corner_radius=8, padx=10, pady=10)
+        self.title_label = ctk.CTkLabel(self.app, text="Traductor a Latex", font=("Poppins", 26, "bold"), text_color="#4d4e4f",
+                               fg_color="#93d0f8", corner_radius=8, padx=10, pady=10)
         self.title_label.pack(fill="x", padx=20, pady=10)
 
-        self.chat_frame = ctk.CTkScrollableFrame(self.app, fg_color="#3A3A3A", corner_radius=12)
+        self.chat_frame = ctk.CTkScrollableFrame(self.app, fg_color="#0a2536", corner_radius=12)
         self.chat_frame.pack(fill="both", expand=True, padx=20, pady=10)
         # Inicializar componentes
         self.lexer = Lexer().lexer
@@ -125,7 +165,7 @@ class ChatLatexApp:
                      "Escribe 'salir' para terminar el programa y generar el PDF.\n", 
                      self.chat_frame, sender="bot")
 
-        entry_frame = ctk.CTkFrame(self.app, fg_color="#2A2A2A", corner_radius=12)
+        entry_frame = ctk.CTkFrame(self.app, fg_color="#0a2536", corner_radius=12)
         entry_frame.pack(side="bottom", fill="x", padx=10, pady=10)
 
         def on_textbox_click(event):
@@ -133,7 +173,7 @@ class ChatLatexApp:
                 textbox.configure(state="normal")
                 textbox.delete("1.0", "end")
 
-        textbox = ctk.CTkTextbox(entry_frame, height=80, wrap="word", fg_color="#333333", text_color="#FFFFFF", corner_radius=12, border_width=0, padx=10, pady=10, font=("Roboto", 14))
+        textbox = ctk.CTkTextbox(entry_frame, height=80, wrap="word", fg_color="#252525", text_color="#FFFFFF", corner_radius=12, border_width=0, padx=10, pady=10, font=("Roboto", 14))
         textbox.pack(side="left", fill="both", expand=True, padx=10, pady=10)
 
         # Configurar el texto de marcador de posición
@@ -234,13 +274,13 @@ class ChatLatexApp:
             button_frame = ctk.CTkFrame(text_frame, fg_color="transparent")
             button_frame.pack(pady=2)
 
-            copy_button = ctk.CTkButton(button_frame, image=self.copy_img, text="", fg_color="#4CAF50", corner_radius=8, width=40, height=40, command=lambda: pyperclip.copy(text))
+            copy_button = ctk.CTkButton(button_frame, image=self.copy_img, text="", fg_color="#f6f9fb", corner_radius=8, width=40, height=40, command=lambda: pyperclip.copy(text))
             copy_button.pack(side="left", padx=5)
             if self.state!="finished":
-                download_button = ctk.CTkButton(button_frame, image=self.download_img, text="", fg_color="#FF5722", corner_radius=8, width=40, height=40,  state="disabled")
+                download_button = ctk.CTkButton(button_frame, image=self.download_img, text="", fg_color="#f6f9fb", corner_radius=8, width=40, height=40,  state="disabled")
                 download_button.pack(side="left", padx=5)
             else: 
-                download_button = ctk.CTkButton(button_frame, image=self.download_img, text="", fg_color="#FF5722", corner_radius=8, width=40, height=40, command=lambda: self.download_latex(self.pdf_name,self.author), state="normal")
+                download_button = ctk.CTkButton(button_frame, image=self.download_img, text="", fg_color="#f6f9fb", corner_radius=8, width=40, height=40, command=lambda: self.download_latex(self.pdf_name,self.author), state="normal")
                 download_button.pack(side="left", padx=5)
 
         if sender == "bot":
@@ -323,7 +363,8 @@ class ChatLatexApp:
         # Volver a crear la ventana de chat con todos los componentes necesarios
         self.title_label.destroy()
         self.chat_window()
-        
+
+    
 
 
 # Ejecutar la aplicación
