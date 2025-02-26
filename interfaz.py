@@ -8,6 +8,8 @@ from sintactico import Parser
 from semantico import SemanticAnalyzer
 from generador_latex import LatexGenerator
 from generador_pdf import PDFGenerator
+
+
 # Inicializar pygame mixer para reproducir sonidos
 mixer.init()
 
@@ -46,8 +48,8 @@ class ChatLatexApp:
     def start_window(self):
         self.window = ctk.CTk()
         self.window.title("ChatLatex - Inicio")
-        self.window_width = 1000
-        self.window_height = 700
+        self.window_width = 800
+        self.window_height = 400
         screen_width = self.window.winfo_screenwidth()
         screen_height = self.window.winfo_screenheight()
         pos_x = int((screen_width / 2) - (self.window_width / 2))
@@ -59,54 +61,11 @@ class ChatLatexApp:
                                    fg_color="#93d0f8", corner_radius=8, padx=10, pady=10)
         title_label.pack(fill="x", padx=20, pady=10)
 
-        start_button = ctk.CTkButton(self.window, text="Empezar a traducir", command=self.open_chat, font=("Poppins", 16, "bold"), width=200, height=50)
+        start_button = ctk.CTkButton(self.window, text="Empezar a traducir", command=self.open_chat, font=("Poppins", 16, "bold"), width=250, height=100)
         start_button.pack(pady=20)
 
-        options_button = ctk.CTkButton(self.window, text="Opciones", command=self.open_opciones, font=("Poppins", 16, "bold"), width=200, height=50)
-        options_button.pack(pady=10)
-
-        about_button = ctk.CTkButton(self.window, text="Sobre el proyecto", command=self.open_proyecto, font=("Poppins", 16, "bold"), width=200, height=50)
-        about_button.pack(pady=10)
 
         self.window.mainloop()
-
-    def open_opciones(self):
-        self.opciones_window = ctk.CTkToplevel(self.window)
-        self.opciones_window.title("Opciones")
-        screen_width = self.opciones_window.winfo_screenwidth()
-        screen_height = self.opciones_window.winfo_screenheight()
-        pos_x = int((screen_width / 2) - (self.window_width / 2))
-        pos_y = int((screen_height / 2) - (self.window_height / 2))
-        self.opciones_window.geometry(f"{self.window_width}x{self.window_height}+{pos_x}+{pos_y}")
-        self.opciones_window.configure(fg_color="#2A2A2A")  # Fondo principal
-        title_label = ctk.CTkLabel(self.opciones_window, text="Opciones", font=("Poppins", 26, "bold"), text_color="#FFFFFF",
-                                   fg_color="#3A3A3A", corner_radius=8, padx=10, pady=10)
-        title_label.pack(fill="x", padx=20, pady=10)
-
-        # Aquí puedes agregar más widgets para las opciones
-        option1 = ctk.CTkButton(self.opciones_window, text="Opción 1", font=("Poppins", 16, "bold"), width=200, height=50)
-        option1.pack(pady=10)
-
-        option2 = ctk.CTkButton(self.opciones_window, text="Opción 2", font=("Poppins", 16, "bold"), width=200, height=50)
-        option2.pack(pady=10)
-
-    def open_proyecto(self):
-        self.proyecto_window = ctk.CTkToplevel(self.window)
-        self.proyecto_window.title("Sobre el proyecto")
-        screen_width = self.proyecto_window.winfo_screenwidth()
-        screen_height = self.proyecto_window.winfo_screenheight()
-        pos_x = int((screen_width / 2) - (self.window_width / 2))
-        pos_y = int((screen_height / 2) - (self.window_height / 2))
-        self.proyecto_window.geometry(f"{self.window_width}x{self.window_height}+{pos_x}+{pos_y}")
-        self.proyecto_window.configure(fg_color="#2A2A2A")  # Fondo principal
-
-        title_label = ctk.CTkLabel(self.proyecto_window, text="Sobre el proyecto", font=("Poppins", 26, "bold"), text_color="#FFFFFF",
-                                   fg_color="#3A3A3A", corner_radius=8, padx=10, pady=10)
-        title_label.pack(fill="x", padx=20, pady=10)
-
-        # Aquí puedes agregar más widgets para la información del proyecto
-        info_label = ctk.CTkLabel(self.proyecto_window, text="Este es un proyecto de traducción de expresiones matemáticas a LaTeX.", font=("Poppins", 16), text_color="#FFFFFF")
-        info_label.pack(pady=10)
 
 
 
