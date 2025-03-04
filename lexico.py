@@ -1,3 +1,8 @@
+# pylint: disable=C0103,C0116
+"""
+Este módulo implementa un analizador léxico utilizando PLY.
+"""
+
 import ply.lex as lex
 
 class Lexer:
@@ -5,28 +10,22 @@ class Lexer:
     Analizador léxico que tokeniza expresiones matemáticas.
     Soporta números, variables, operadores, funciones y constantes matemáticas.
     """
-    # Definición de los tokens
+    # ANALISIS LEXICOGRAFICO: Especificacion de componentes lexicos
     tokens = (
-        'NUMBER', 'VARIABLE', 'CONSTANT',
-        'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'POWER',
-        'PAREN_OPEN', 'PAREN_CLOSE', 'FUNCTION', 'COMMA'
+        'NUMBER', 'VARIABLE', 'OPERATOR',
+        'PAREN_OPEN', 'PAREN_CLOSE', 'CONSTANT', 'FUNCTION'
     )
 
     # Lista de funciones matemáticas soportadas
     MATH_FUNCTIONS = {'sqrt', 'sin', 'cos', 'tan', 'log', 'exp', 'abs'}
-    
 
-    # Reglas para reconocer tokens con expresiones regulares
-    t_COMMA = r','
-    t_PLUS = r'\+'
-    t_MINUS = r'-'
-    t_TIMES = r'\*'
-    t_DIVIDE = r'/'
-    t_POWER = r'\^'
+    # EXPRESIONES REGULARES Y AUTOMATAS FINITOS: Expresiopnes regularees
+    t_OPERATOR = r'\+|\-|\*|\/|\^'
     t_PAREN_OPEN = r'\('
     t_PAREN_CLOSE = r'\)'
     t_ignore = ' \t'
 
+    # EXPRESIONES REGULARES Y AUTOMATAS FINITOS: Uso de automatas finitos deterministas
     def t_NUMBER(self, t):
         r'\d+\.?\d*'
         t.value = float(t.value) if '.' in t.value else int(t.value)
@@ -36,22 +35,23 @@ class Lexer:
         r'[a-zA-Z_]+'
         if t.value in self.MATH_FUNCTIONS:
             t.type = 'FUNCTION'
-        elif t.value.lower() in {'pi', 'π'}:
+        elif t.value in {'pi', 'π'}:
             t.type = 'CONSTANT'
         return t
 
     def t_error(self, t):
-        print(f"Error léxico: Carácter no reconocido '{t.value[0]}' en posición {t.lexpos}")
+        print(f"Error léxico: carácter no reconocido '{t.value[0]}' en posición {t.lexpos}")
         t.lexer.skip(1)
 
     def __init__(self):
         self.lexer = lex.lex(module=self)
 
+    # ANALISIS LEXICOGRAFICO: Construccion de analizador lexicos
     def tokenize(self, expr):
+        """Convierte una expresión en una lista de tokens."""
         self.lexer.input(expr)
         return [{"type": tok.type, "value": tok.value} for tok in self.lexer]
 
-# Ejemplo de uso
 if __name__ == "__main__":
     lexer = Lexer()
     user_expression = input("Introduce una expresión matemática: ")
